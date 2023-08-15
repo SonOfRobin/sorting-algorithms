@@ -1,0 +1,1 @@
+#root{width:100vh;margin:0 auto;padding:2rem;text-align:center}#bar-container{display:flex;flex-direction:row;height:60vh;transition-duration:2s}.color-bar{transition-duration:.5s}.active{transition:all .25s;translate:0 -1.5rem}.inactive{translate:0 0}
