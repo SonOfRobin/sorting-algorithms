@@ -10,8 +10,8 @@ const insertionSort: SortMethod = async (parentNode, setBars, bars, setIsSorting
     firstChild.style.backgroundColor = colorize(firstChild, newBars.length);
     for (let i = 1; i < bars.length; i++) {
       const key = parentNode.current.children[i];
-      key.className = key.className.replace('inactive', 'active');
-      key.style.backgroundColor = colorize(key, newBars.length)
+      [key.className, key.style.backgroundColor] = [key.className.replace('inactive', 'active'), colorize(key, newBars.length)]
+      await pauseFunction(50)
       let prevNumIndex = i - 1;
       while (
         prevNumIndex >= 0 &&

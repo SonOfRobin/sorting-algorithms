@@ -1,11 +1,10 @@
-import { useRef, useState } from 'react';
+import { ReactElement, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import useCreateBars, { shuffleArray } from '../hooks/useCreateBars';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import insertionSort from '../sorting-methods/insertionSort';
 import bubbleSort from '../sorting-methods/bubbleSort';
-import normalizeMethodNames from '../utilities/normalizeMethodNames';
 
 export interface IBarContainer extends HTMLDivElement {
   children: HTMLCollectionOf<HTMLDivElement>;
@@ -37,22 +36,18 @@ const BarContainer = () => {
     }
   };
 
-  const algos = [insertionSort, bubbleSort];
+  const algorithms = new Map([["Insertion Sort", insertionSort],["Bubble Sort", bubbleSort]]);
+  
+  const buttons: ReactElement<typeof Button>[] = [];
+
+  algorithms.forEach((algorithm, algorithmName ) => {
+    buttons.push(<Button key={algorithmName} disabled={isSorting} onClick={() => {handleSort(algorithm)}} variant='contained'>{algorithmName}</Button>)
+  })
 
   return (
     <>
       <Stack direction={"row"} spacing={2}>
-        {algos.map((algo) => (
-          <Button
-            key={algo.name}
-            disabled={isSorting}
-            onClick={() => {
-              handleSort(algo);
-            }}
-            variant='contained'>
-            {normalizeMethodNames(algo)}
-          </Button>
-        ))}
+        {buttons}
       </Stack>
       <Box height={'60vh'} width={'90%'} id={'bar-container'} padding={4} ref={containerRef}>
         {bars}
