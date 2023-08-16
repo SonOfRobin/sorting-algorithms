@@ -4,27 +4,32 @@ import useCreateBars, { shuffleArray } from '../hooks/useCreateBars';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import insertionSort from '../sorting-methods/insertionSort';
+import bubbleSort from '../sorting-methods/bubbleSort';
+import normalizeMethodNames from '../utilities/normalizeMethodNames';
 
 export interface IBarContainer extends HTMLDivElement {
   children: HTMLCollectionOf<HTMLDivElement>;
 }
 
+export type SortMethod = (
+  containerRef: React.RefObject<IBarContainer>,
+  setBars: React.Dispatch<React.SetStateAction<React.ReactElement<HTMLDivElement>[]>>,
+  bars: React.ReactElement<HTMLDivElement>[],
+  setIsSorting: React.Dispatch<React.SetStateAction<boolean>>
+) => void;
+
 const BarContainer = () => {
-  const [sorted, setSortState] = useState(false);
   const [isSorting, setIsSorting] = useState(false);
   const { bars, setBars } = useCreateBars(30);
   const containerRef = useRef<IBarContainer>(null);
 
-  const handleSort = () => {
+  const handleSort = (sortMethod: SortMethod) => {
     setIsSorting(true);
-    insertionSort(containerRef, setBars, bars);
-    setSortState(true);
-    setIsSorting(false);
+    sortMethod(containerRef, setBars, bars, setIsSorting);
   };
 
   const handleShuffle = () => {
     setBars(shuffleArray(bars));
-    setSortState(false);
     if (containerRef.current) {
       for (let i = 0; i < bars.length; i++) {
         containerRef.current.children[i].style.backgroundColor = 'white';
@@ -32,18 +37,24 @@ const BarContainer = () => {
     }
   };
 
+  const algos = [insertionSort, bubbleSort];
+
   return (
     <>
-      <Button disabled={isSorting} onClick={handleSort} variant='contained'>
-        Insertion Sort
-      </Button>
-      <Box
-        className={sorted ? 'sorted' : 'unsorted'}
-        height={'60vh'}
-        width={'90%'}
-        id={'bar-container'}
-        padding={4}
-        ref={containerRef}>
+      <Stack direction={"row"} spacing={2}>
+        {algos.map((algo) => (
+          <Button
+            key={algo.name}
+            disabled={isSorting}
+            onClick={() => {
+              handleSort(algo);
+            }}
+            variant='contained'>
+            {normalizeMethodNames(algo)}
+          </Button>
+        ))}
+      </Stack>
+      <Box height={'60vh'} width={'90%'} id={'bar-container'} padding={4} ref={containerRef}>
         {bars}
       </Box>
       <Stack spacing={2} direction={'row'} justifyContent={'center'}>
