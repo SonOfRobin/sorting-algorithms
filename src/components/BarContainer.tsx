@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import insertionSort from '../sorting-methods/insertionSort';
 import bubbleSort from '../sorting-methods/bubbleSort';
+import treeSort from '../sorting-methods/treeSort';
 
 export interface IBarContainer extends HTMLDivElement {
   children: HTMLCollectionOf<HTMLDivElement>;
@@ -36,7 +37,7 @@ const BarContainer = () => {
     }
   };
 
-  const algorithms = new Map([["Insertion Sort", insertionSort],["Bubble Sort", bubbleSort]]);
+  const algorithms = new Map([["Insertion Sort", insertionSort],["Bubble Sort", bubbleSort], ["Tree Sort", treeSort]]);
   
   const buttons: ReactElement<typeof Button>[] = [];
 

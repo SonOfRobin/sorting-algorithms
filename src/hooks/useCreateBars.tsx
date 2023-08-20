@@ -27,7 +27,7 @@ export default function useCreateBars(numberOfBars: number) {
         width: `${(1 / numberOfBars) * 100}%`,
         backgroundColor: 'white',
       };
-      newBars.push(<div id={`color-bar${i}`} className='color-bar inactive' key={i} style={styleProps} />);
+      newBars.push(<div id={`color-bar${i}`} className='color-bar inactive' key={`color-bar${i}`} style={styleProps} />);
     }
 
     setBars(shuffleArray(newBars));
